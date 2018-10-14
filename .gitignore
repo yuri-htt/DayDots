@@ -1,0 +1,5 @@
+node_modules
+.expo/**/*
+bin/*.app
+app.json
+package-lock.json
