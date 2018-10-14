@@ -15,7 +15,6 @@
   "Take": {
     "tab1": "Library",
     "tab2": "Photo",
-    "tab3": "Movie",
     "noPermission": "No Camera Permission"
   },
   "TakePublish": {
@@ -27,7 +26,6 @@
     "loading": "Loading...",
     "noPost": "Not Found",
     "photo": "Photo",
-    "movie": "Movie"
   },
   "User": {
     "self": "Me",

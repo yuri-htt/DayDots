@@ -128,15 +128,6 @@ export default class NotificationScreen extends React.Component {
                 <Text style={styles.message}>{item.from.name}{I18n.t('Notification.message')}</Text>
                 <TouchableOpacity onPress={() => this.onFilePress(item)}>
                   {item.post.type === 'photo' && <Image uri={item.post.fileUri} style={styles.file} resizeMode="cover" />}
-                  {item.post.type === 'movie' && (
-                    <Video
-                      source={{ uri: item.post.fileUri }}
-                      resizeMode="cover"
-                      shouldPlay
-                      isLooping
-                      style={styles.file}
-                    />
-                  )}
                 </TouchableOpacity>
               </View>
             </TouchableHighlight>

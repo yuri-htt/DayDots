@@ -81,11 +81,6 @@ export default class TakeScreen extends React.Component {
     if (this.camera && !isRecording) {
       this.setState({ isRecording: true });
 
-      this.movie = await this.camera.recordAsync({
-        quality: '720p',
-        maxDuration: 10,
-      });
-
       this.setState({ isRecording: false });
       navigation.push('TakePublish', { mode, movie: this.movie });
     } else {
@@ -138,7 +133,7 @@ export default class TakeScreen extends React.Component {
     } if (hasCameraPermission === false) {
       return (
         <View style={[styles.container, styles.empty]}>
-          <Text   style={styles.emptyText}>{I18n.t('Take.noPermission')}</Text>
+          <Text style={styles.emptyText}>{I18n.t('Take.noPermission')}</Text>
         </View>
       );
     }
@@ -171,17 +166,13 @@ export default class TakeScreen extends React.Component {
         </Camera>
         <View style={styles.take}>
           {mode === 'photo' && <TouchableOpacity style={styles.takeButton} onPress={this.onTakePress} />}
-          {mode === 'movie' && <TouchableOpacity style={[styles.takeButton, isRecording ? styles.takeButtonRecording : null]} onPress={this.onRecordPress} />}
         </View>
         <View style={styles.tabs}>
           <TouchableOpacity style={styles.tab} onPress={() => this.onTabPress('library', I18n.t('Take.tab1'))}>
-            <Text   style={[styles.tabText, (mode === 'library') ? styles.tabTextActive : null]}>{I18n.t('Take.tab1')}</Text>
+            <Text style={[styles.tabText, (mode === 'library') ? styles.tabTextActive : null]}>{I18n.t('Take.tab1')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.tab} onPress={() => this.onTabPress('photo', I18n.t('Take.tab2'))}>
-            <Text   style={[styles.tabText, (mode === 'photo') ? styles.tabTextActive : null]}>{I18n.t('Take.tab2')}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.tab} onPress={() => this.onTabPress('movie', I18n.t('Take.tab3'))}>
-            <Text   style={[styles.tabText, (mode === 'movie') ? styles.tabTextActive : null]}>{I18n.t('Take.tab3')}</Text>
+            <Text style={[styles.tabText, (mode === 'photo') ? styles.tabTextActive : null]}>{I18n.t('Take.tab2')}</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -120,14 +120,6 @@ export default class Item extends React.Component {
           </View>
         </View>
         {type === 'photo' && <Image uri={fileUri} style={styles.file} />}
-        {type === 'movie' && (
-          <Video
-            source={{ uri: fileUri }}
-            resizeMode="cover"
-            useNativeControls
-            style={styles.file}
-          />
-        )}
         <View style={styles.buttons}>
           <IconButton
             name={liked ? 'ios-heart' : 'ios-heart-outline'}

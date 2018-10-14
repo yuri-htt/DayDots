@@ -113,15 +113,6 @@ export default class UserScreen extends React.Component {
             return (
               <TouchableOpacity onPress={() => this.onThumbnailPress(item)}>
                 {item.type === 'photo' && <Image uri={item.thumbnail} style={styles.file} />}
-                {item.type === 'movie' && (
-                  <Video
-                    source={{ uri: item.thumbnail }}
-                    resizeMode="cover"
-                    shouldPlay
-                    isLooping
-                    style={styles.file}
-                  />
-                )}
               </TouchableOpacity>
             );
           }}
