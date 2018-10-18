@@ -14,7 +14,6 @@ import IconButton from 'app/src/components/IconButton';
 const TakeStack = createStackNavigator(
   {
     Take: { screen: TakeScreen },
-    TakePublish: { screen: TakePublishScreen },
   },
   {
     headerMode: 'screen',
@@ -25,6 +24,7 @@ const CardNavigator = createStackNavigator(
   {
     Main: { screen: MainTabNavigator, navigationOptions: { header: null } },
     User: { screen: UserScreen },
+    Take: { screen: TakePublishScreen },
     Tag: { screen: TagScreen },
     Post: { screen: PostScreen },
   },
@@ -33,6 +33,12 @@ const CardNavigator = createStackNavigator(
       headerTitleStyle: {
         color: '#333',
       },
+      headerStyle: {
+        backgroundColor: '#fff',
+        height: 44,
+      },
+      // これをいれるとヘッダー自体の高さがなくなる
+      // headerTransparent: true,
       headerLeft: IconButton,
     }),
   },

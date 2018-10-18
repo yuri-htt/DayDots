@@ -22,8 +22,11 @@ export default class TakeScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    const { navigation } = this.props;
+
     this.state = {
-      mode: 'photo',
+      // mode: 'photo',
+      mode: navigation.getParam('mode', 'photo'),
       hasCameraPermission: null,
       cameraType: Camera.Constants.Type.back,
       flashMode: Camera.Constants.FlashMode.off,
@@ -125,7 +128,6 @@ export default class TakeScreen extends React.Component {
       hasCameraPermission,
       cameraType,
       flashMode,
-      isRecording,
     } = this.state;
 
     if (hasCameraPermission === null) {

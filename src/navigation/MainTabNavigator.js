@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 /* from app */
 import HomeScreen from 'app/src/screens/HomeScreen';
 import SearchScreen from 'app/src/screens/SearchScreen';
+import TakePublishScreen from 'app/src/screens/TakePublishScreen';
 import NotificationScreen from 'app/src/screens/NotificationScreen';
 import UserScreen from 'app/src/screens/UserScreen';
 import {
@@ -35,12 +36,9 @@ export default createBottomTabNavigator(
       }),
     },
     TakeTab: {
-      screen: () => null,
-      navigationOptions: ({ navigation }) => ({
+      screen: createTabStack('TakePublishScreen', TakePublishScreen),
+      navigationOptions: () => ({
         tabBarIcon: TakeTabIcon,
-        tabBarOnPress: () => {
-          navigation.push('TakeModal');
-        },
       }),
     },
     NotificationTab: {
