@@ -5,8 +5,10 @@ import {
   Image,
   Keyboard,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
-import { Video } from 'expo';
+import StarRating from 'react-native-star-rating';
+import { Camera, ImagePicker, Permissions } from 'expo';
 
 /* from app */
 import IconButton from 'app/src/components/IconButton';
@@ -18,7 +20,6 @@ import styles from './styles';
 
 export default class TakePublishScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerLeft: <IconButton name="ios-arrow-back" onPress={() => navigation.goBack()} />,
     headerTitle: I18n.t('TakePublish.title'),
     headerRight: navigation.getParam('headerRight', null),
   })
@@ -31,24 +32,29 @@ export default class TakePublishScreen extends React.Component {
     this.state = {
       mode: navigation.getParam('mode', 'photo'),
       photo: navigation.getParam('photo', {}),
-      movie: navigation.getParam('movie', {}),
+      titleText: '',
       text: '',
+      starCount: 0,
     };
 
     GA.ScreenHit('TakePublish');
   }
 
   componentDidMount() {
-    const { photo = {}, movie = {} } = this.state;
+    const { photo = {} } = this.state;
     const { navigation } = this.props;
 
-    if (!photo.uri && !movie.uri) {
+    if (!photo.uri) {
       navigation.goBack();
     }
 
     navigation.setParams({
       headerRight: <IconButton name="ios-send-outline" onPress={this.onPublish} />,
     });
+  }
+
+  onChangeTitleText = (titleText) => {
+    this.setState({ titleText });
   }
 
   onChangeText = (text) => {
@@ -59,7 +65,6 @@ export default class TakePublishScreen extends React.Component {
     const {
       mode,
       photo,
-      movie,
       text,
     } = this.state;
     const { navigation } = this.props;
@@ -70,7 +75,7 @@ export default class TakePublishScreen extends React.Component {
       headerRight: <IconButton name="ios-send" />,
     });
 
-    const result = await firebase.createPost(text, mode === 'photo' ? photo : movie, mode);
+    const result = await firebase.createPost(text, mode === 'photo' ? photo : mode);
 
     navigation.setParams({
       headerRight: <IconButton name="ios-send-outline" onPress={this.onPublish} />,
@@ -83,30 +88,106 @@ export default class TakePublishScreen extends React.Component {
     }
   }
 
+  onStarRatingPress(rating) {
+    this.setState({
+      starCount: rating,
+    });
+  }
+
+  onUserPress = async () => {
+    const { me, dispatch } = this.props;
+
+    const permissions = Permissions.CAMERA_ROLL;
+    const { status } = await Permissions.askAsync(permissions);
+
+    if (status) {
+      const photo = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+      });
+
+      if (!photo.cancelled) {
+        const response = await firebase.changeUserImg(photo);
+        if (!response.error) {
+          dispatch({
+            type: 'ME_SET', payload: { ...me, img: response },
+          });
+        }
+      }
+    }
+  }
+
+  onTabPress = async (mode = 'photo', headerTitle = I18n.t('Take.tab2')) => {
+    const { flashMode } = this.state;
+    const { navigation } = this.props;
+
+    if (mode !== 'library') {
+      this.setState({
+        mode,
+        flashMode: (mode === 'photo') ? flashMode : Camera.Constants.FlashMode.off,
+      });
+
+      navigation.setParams({
+        headerTitle,
+      });
+    } else {
+      const permissions = Permissions.CAMERA_ROLL;
+      const { status } = await Permissions.askAsync(permissions);
+
+      if (status) {
+        const photo = await ImagePicker.launchImageLibraryAsync({
+          allowsEditing: true,
+          aspect: [1, 1],
+        });
+
+        if (!photo.cancelled) {
+          navigation.push('TakePublish', { mode: 'photo', photo });
+        }
+      }
+    }
+  }
+
+  tabBarOnPress(navigation) {
+    navigation.push('TakeModal');
+  }
+
   render() {
     const {
       mode,
       photo,
-      movie,
+      titleText,
       text,
+      starCount,
     } = this.state;
+    const { navigation } = this.props;
 
     return (
       <ScrollView scrollEnabled={false} style={styles.container} contentContainerstyle={styles.container}>
-        <View style={styles.row}>
-          {mode === 'photo' && <Image source={{ uri: photo.uri }} style={styles.photo} />}
-          {mode === 'movie' && (
-            <Video
-              source={{ uri: movie.uri }}
-              style={styles.photo}
-              resizeMode="cover"
-              shouldPlay
-              isLooping
-            />
-          )}
+        <View style={[styles.row, styles.starContainer]}>
+          <StarRating
+            disabled={false}
+            maxStars={5}
+            rating={starCount}
+            selectedStar={rating => this.onStarRatingPress(rating)}
+            starSize={28}
+            buttonStyle={{ marginHorizontal: 4 }}
+            fullStarColor="orange"
+            emptyStarColor="orange"
+          />
+        </View>
+        <View style={[styles.row, styles.textInputContainer]}>
           <TextInput
             multiline
-            style={styles.textInput}
+            style={[styles.textInput, styles.title]}
+            placeholder="Title"
+            underlineColorAndroid="transparent"
+            textAlignVertical="top"
+            value={titleText}
+            onChangeText={this.onChangeTitleText}
+          />
+          <TextInput
+            multiline
+            style={[styles.textInput, styles.content]}
             placeholder={I18n.t('TakePublish.placeholder')}
             underlineColorAndroid="transparent"
             textAlignVertical="top"
@@ -114,6 +195,22 @@ export default class TakePublishScreen extends React.Component {
             onChangeText={this.onChangeText}
           />
         </View>
+        <IconButton
+          name="ios-reverse-camera-outline"
+          size={36}
+          color="#000"
+          style={styles.change}
+          // onPress={this.onUserPress}
+          // onPress={this.tabBarOnPress(navigation)}
+          onPress={() => this.tabBarOnPress(navigation)}
+        />
+        {mode === 'photo'
+          && (
+          <TouchableOpacity onPress={() => this.onTabPress('library', I18n.t('Take.tab1'))}>
+            <Image source={{ uri: photo.uri }} style={styles.photo} />
+          </TouchableOpacity>
+          )
+        }
       </ScrollView>
     );
   }
