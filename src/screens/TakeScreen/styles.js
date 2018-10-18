@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: 'row',
+    paddingBottom: 32,
   },
   tab: {
     flex: 1,
