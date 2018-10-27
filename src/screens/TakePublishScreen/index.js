@@ -75,7 +75,7 @@ export default class TakePublishScreen extends React.Component {
       headerRight: <IconButton name="ios-send" />,
     });
 
-    const result = await firebase.createPost(text, mode === 'photo' ? photo : mode);
+    const result = await firebase.createPost(starCount, titleText, text, photo);
 
     navigation.setParams({
       headerRight: <IconButton name="ios-send-outline" onPress={this.onPublish} />,

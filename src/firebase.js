@@ -103,13 +103,15 @@ class Firebase {
   }
 
   // 投稿を作成
-  createPost = async (text = '', file = '', type = 'photo') => {
+  createPost = async (starCount = 0, titleText = '', text = '', file = '', type = 'photo') => {
     // 複合インデックスの問題が出てくるのでtag自体にtimestamp
     try {
       const remoteUri = await this.uploadFileAsync(file.uri);
       const tags = text.match(/[#]{0,2}?(w*[一-龠_ぁ-ん_ァ-ヴーａ-ｚＡ-Ｚa-zA-Z0-9]+|[a-zA-Z0-9_]+|[a-zA-Z0-9_]w*)/gi);
 
       await this.post.add({
+        starCount,
+        titleText,
         text,
         timestamp: Date.now(),
         type,
