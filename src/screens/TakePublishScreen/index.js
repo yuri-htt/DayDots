@@ -33,10 +33,7 @@ export default class TakePublishScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    const { navigation } = this.props;
-
     this.state = {
-      mode: navigation.getParam('mode', 'photo'),
       titleText: '',
       text: '',
       starCount: 0,
@@ -63,11 +60,11 @@ export default class TakePublishScreen extends React.Component {
 
   onPublish = async () => {
     const {
-      mode,
-      photo,
+      starCount,
+      titleText,
       text,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, photo } = this.props;
 
     Keyboard.dismiss();
 
@@ -84,7 +81,13 @@ export default class TakePublishScreen extends React.Component {
     if (result.error) {
       Alert.alert(I18n.t('TakePublish.alert'), result.error);
     } else {
-      navigation.dispatch({ type: 'TAKEMODAL_CLOSE' });
+      navigation.navigate('HomeTab');
+      navigation.dispatch({ type: 'PHOTO_DELETE' });
+      this.setState({
+        titleText: '',
+        text: '',
+        starCount: 0,
+      });
     }
   }
 
@@ -106,7 +109,6 @@ export default class TakePublishScreen extends React.Component {
 
     if (mode !== 'library') {
       this.setState({
-        mode,
         flashMode: (mode === 'photo') ? flashMode : Camera.Constants.FlashMode.off,
       });
 
