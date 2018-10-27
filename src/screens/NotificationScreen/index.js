@@ -7,7 +7,7 @@ import {
   RefreshControl,
   ActivityIndicator,
 } from 'react-native';
-import { Notifications, Video } from 'expo';
+import { Notifications } from 'expo';
 
 /* node_modules */
 import { Image } from 'react-native-expo-image-cache';
@@ -109,7 +109,7 @@ export default class NotificationScreen extends React.Component {
             />
           )}
         >
-          <Text   style={styles.emptyText}>{I18n.t('Notification.noNotifications')}</Text>
+          <Text style={styles.emptyText}>{I18n.t('Notification.noNotifications')}</Text>
         </ScrollView>
       );
     }

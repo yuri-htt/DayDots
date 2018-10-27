@@ -90,7 +90,7 @@ export default class PostScreen extends React.Component {
     if (fetching) {
       return (
         <View style={[styles.container, styles.empty]}>
-          <Text   style={styles.emptyText}>{I18n.t('Post.loading')}</Text>
+          <Text style={styles.emptyText}>{I18n.t('Post.loading')}</Text>
         </View>
       );
     }
@@ -98,7 +98,7 @@ export default class PostScreen extends React.Component {
     if (error) {
       return (
         <View style={[styles.container, styles.empty]}>
-          <Text   style={styles.emptyText}>{I18n.t('Post.noPost')}</Text>
+          <Text style={styles.emptyText}>{I18n.t('Post.noPost')}</Text>
         </View>
       );
     }
