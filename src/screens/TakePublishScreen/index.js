@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import StarRating from 'react-native-star-rating';
 import { Camera, ImagePicker, Permissions } from 'expo';
+import { withNavigationFocus } from 'react-navigation';
+import { connect } from 'react-redux';
 
 /* from app */
 import IconButton from 'app/src/components/IconButton';
@@ -18,6 +20,10 @@ import GA from 'app/src/analytics';
 import I18n from 'app/src/i18n';
 import styles from './styles';
 
+@withNavigationFocus
+@connect(state => ({
+  photo: state.photo,
+}))
 export default class TakePublishScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: I18n.t('TakePublish.title'),
@@ -31,7 +37,6 @@ export default class TakePublishScreen extends React.Component {
 
     this.state = {
       mode: navigation.getParam('mode', 'photo'),
-      photo: navigation.getParam('photo', {}),
       titleText: '',
       text: '',
       starCount: 0,
@@ -41,12 +46,7 @@ export default class TakePublishScreen extends React.Component {
   }
 
   componentDidMount() {
-    const { photo = {} } = this.state;
     const { navigation } = this.props;
-
-    if (!photo.uri) {
-      navigation.goBack();
-    }
 
     navigation.setParams({
       headerRight: <IconButton name="ios-send-outline" onPress={this.onPublish} />,
@@ -147,19 +147,13 @@ export default class TakePublishScreen extends React.Component {
     }
   }
 
-  tabBarOnPress(navigation) {
-    navigation.push('TakeModal');
-  }
-
   render() {
     const {
-      mode,
-      photo,
       titleText,
       text,
       starCount,
     } = this.state;
-    const { navigation } = this.props;
+    const { navigation, photo } = this.props;
 
     return (
       <ScrollView scrollEnabled={false} style={styles.container} contentContainerstyle={styles.container}>
@@ -202,9 +196,9 @@ export default class TakePublishScreen extends React.Component {
           style={styles.change}
           // onPress={this.onUserPress}
           // onPress={this.tabBarOnPress(navigation)}
-          onPress={() => this.tabBarOnPress(navigation)}
+          onPress={() => navigation.push('TakeModal')}
         />
-        {mode === 'photo'
+        {photo
           && (
           <TouchableOpacity onPress={() => this.onTabPress('library', I18n.t('Take.tab1'))}>
             <Image source={{ uri: photo.uri }} style={styles.photo} />

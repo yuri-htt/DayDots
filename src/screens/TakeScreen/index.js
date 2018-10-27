@@ -96,7 +96,7 @@ export default class TakeScreen extends React.Component {
     const { flashMode } = this.state;
     const { navigation } = this.props;
 
-    if (mode !== 'library') {
+    if (mode === 'photo') {
       this.setState({
         mode,
         flashMode: (mode === 'photo') ? flashMode : Camera.Constants.FlashMode.off,
@@ -114,9 +114,9 @@ export default class TakeScreen extends React.Component {
           allowsEditing: true,
           aspect: [1, 1],
         });
-
         if (!photo.cancelled) {
-          navigation.push('TakePublish', { mode: 'photo', photo });
+          navigation.dispatch({ type: 'TAKEMODAL_CLOSE' });
+          navigation.dispatch({ type: 'PHOTO_SET', payload: photo });
         }
       }
     }
