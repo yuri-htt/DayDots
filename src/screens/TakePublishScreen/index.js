@@ -94,27 +94,10 @@ export default class TakePublishScreen extends React.Component {
     });
   }
 
-  onUserPress = async () => {
-    const { me, dispatch } = this.props;
-
-    const permissions = Permissions.CAMERA_ROLL;
-    const { status } = await Permissions.askAsync(permissions);
-
-    if (status) {
-      const photo = await ImagePicker.launchImageLibraryAsync({
-        allowsEditing: true,
-        aspect: [1, 1],
-      });
-
-      if (!photo.cancelled) {
-        const response = await firebase.changeUserImg(photo);
-        if (!response.error) {
-          dispatch({
-            type: 'ME_SET', payload: { ...me, img: response },
-          });
-        }
-      }
-    }
+  onPressCloseBtn() {
+    const { navigation } = this.props;
+    navigation.dispatch({ type: 'PHOTO_DELETE' });
+    navigation.push('TakeModal');
   }
 
   onTabPress = async (mode = 'photo', headerTitle = I18n.t('Take.tab2')) => {
@@ -189,19 +172,29 @@ export default class TakePublishScreen extends React.Component {
             onChangeText={this.onChangeText}
           />
         </View>
-        <IconButton
-          name="ios-reverse-camera-outline"
-          size={36}
-          color="#000"
-          style={styles.change}
-          // onPress={this.onUserPress}
-          // onPress={this.tabBarOnPress(navigation)}
-          onPress={() => navigation.push('TakeModal')}
-        />
+        {!photo
+          && (
+            <IconButton
+              name="ios-reverse-camera-outline"
+              size={36}
+              color="#000"
+              style={styles.change}
+              onPress={() => navigation.push('TakeModal')}
+            />
+          )
+        }
         {photo
           && (
           <TouchableOpacity onPress={() => this.onTabPress('library', I18n.t('Take.tab1'))}>
             <Image source={{ uri: photo.uri }} style={styles.photo} />
+            <TouchableOpacity onPress={() => this.onPressCloseBtn()} style={styles.dismiss}>
+              <IconButton
+                name="ios-close"
+                size={36}
+                color="#fff"
+                onPress={() => navigation.push('TakeModal')}
+              />
+            </TouchableOpacity>
           </TouchableOpacity>
           )
         }

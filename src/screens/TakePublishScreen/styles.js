@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { Constants } from 'expo';
 
 const styles = StyleSheet.create({
@@ -32,8 +32,13 @@ const styles = StyleSheet.create({
     maxHeight: 16 * 8,
   },
   photo: {
-    width: 100,
-    height: 100,
+    width: Dimensions.get('window').width - 32,
+    height: Dimensions.get('window').width - 32,
+  },
+  dismiss: {
+    position: 'absolute',
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.7)',
   },
 });
 
