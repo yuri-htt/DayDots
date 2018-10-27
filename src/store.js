@@ -1,18 +1,18 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
+import { createLogger } from 'redux-logger';
 
 /* from app */
 import { getActiveRouteName } from 'app/src/navigation/AppNavigator';
 import reducers from 'app/src/reducers';
 
-const logger = () => next => (action) => {
-  if (__DEV__) {
-    if (action.type.indexOf('Navigation') === -1) {
-      console.log(action);
-    }
-  }
-  next(action);
-};
+const isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+
+const logger = createLogger({
+  predicate: () => isDebuggingInChrome,
+  collapsed: true,
+  duration: true,
+});
 
 const screenTracking = store => next => (action) => {
   if (action.type.indexOf('Navigation') === -1 || action.type === 'TAKEMODAL_CLOSE') {
