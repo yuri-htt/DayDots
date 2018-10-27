@@ -11,6 +11,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
   },
+  content: {
+    flexDirection: 'row',
+  },
   headerUser: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -18,17 +21,27 @@ const styles = StyleSheet.create({
   avatar: {
     marginRight: 8,
   },
+  image: {
+    width: 150,
+    height: 150,
+  },
   file: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').width,
+    flex: 1,
   },
   buttons: {
-    padding: 12,
-    paddingBottom: 4,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    paddingHorizontal: 4,
   },
   icon: {
     paddingHorizontal: 0,
     paddingVertical: 0,
+  },
+  titleText: {
+    fontSize: 30,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
   text: {
     paddingHorizontal: 12,
@@ -39,6 +52,10 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     fontSize: 12,
     color: '#999',
+  },
+  stars: {
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
 });
 

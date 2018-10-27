@@ -3,7 +3,8 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import { Constants, Video } from 'expo';
+import { Constants } from 'expo';
+import StarRating from 'react-native-star-rating';
 
 /* node_modules */
 import { Image } from 'react-native-expo-image-cache';
@@ -40,6 +41,8 @@ linkify.add('#', {
 export default class Item extends React.Component {
   static defaultProps = {
     type: 'photo',
+    starCount: 0,
+    titleText: '',
     text: '',
     fileUri: null,
     fileWidth: null,
@@ -87,6 +90,8 @@ export default class Item extends React.Component {
   render() {
     const {
       type,
+      starCount,
+      titleText,
       text,
       fileUri,
       user,
@@ -106,6 +111,7 @@ export default class Item extends React.Component {
 
     return (
       <View style={styles.container} onLayout={this.onLayout}>
+
         <View style={styles.header}>
           <View style={styles.headerUser}>
             <TouchableOpacity style={styles.avatar} onPress={() => onUserPress(this.props)}>
@@ -119,22 +125,48 @@ export default class Item extends React.Component {
             <IconButton name="ios-more" size={26} style={styles.icon} onPress={() => onMorePress(this.props)} />
           </View>
         </View>
-        {type === 'photo' && <Image uri={fileUri} style={styles.file} />}
-        <View style={styles.buttons}>
-          <IconButton
-            name={liked ? 'ios-heart' : 'ios-heart-outline'}
-            size={26}
-            style={styles.icon}
-            color={liked ? '#ed4956' : Constants.manifest.extra.textColor}
-            onPress={() => onLikePress(this.props)}
-          />
+
+        <View style={styles.content}>
+          {type === 'photo' && (
+          <View style={styles.image}>
+            <Image uri={fileUri} style={styles.file} />
+            <View style={styles.buttons}>
+              <IconButton
+                name={liked ? 'ios-heart' : 'ios-heart-outline'}
+                size={26}
+                style={styles.icon}
+                color={liked ? '#ed4956' : Constants.manifest.extra.textColor}
+                onPress={() => onLikePress(this.props)}
+              />
+            </View>
+          </View>
+          )}
+
+          <View>
+            {titleText != '' && (
+            <Text style={styles.titleText}>{titleText}</Text>
+            )}
+            {text != '' && (
+            <Hyperlink onPress={onLinkPress} linkify={linkify} linkStyle={{ color: '#2980b9' }}>
+              <Text style={styles.text}>{text}</Text>
+            </Hyperlink>
+            )}
+            <View style={styles.stars}>
+              <StarRating
+                disabled
+                maxStars={5}
+                rating={starCount}
+                starSize={20}
+                buttonStyle={{ marginHorizontal: 4 }}
+                fullStarColor="orange"
+                emptyStarColor="orange"
+              />
+            </View>
+          </View>
+          {/*
+          <Text style={styles.time}>{this.getRelativeTime(timestamp)}</Text>
+          */}
         </View>
-        {text != '' && (
-          <Hyperlink onPress={onLinkPress} linkify={linkify} linkStyle={{ color: '#2980b9' }}>
-            <Text style={styles.text}>{text}</Text>
-          </Hyperlink>
-        )}
-        <Text style={styles.time}>{this.getRelativeTime(timestamp)}</Text>
       </View>
     );
   }
