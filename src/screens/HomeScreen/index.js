@@ -17,6 +17,9 @@ import Text from 'app/src/components/Text';
 import firebase from 'app/src/firebase';
 import GA from 'app/src/analytics';
 import I18n from 'app/src/i18n';
+import {
+  CategoryCard,
+} from 'app/src/components';
 import styles from './styles';
 
 @withNavigationFocus
@@ -143,31 +146,72 @@ export default class HomeScreen extends React.Component {
       );
     }
     return (
-      <View style={styles.container} testID="Home">
-        <FlatList
-          data={posts}
-          keyExtractor={item => item.key}
-          renderItem={({ item, index, viewableItemIndices }) => (
-            <Item
-              {...item}
-              visible={viewableItemIndices.indexOf(index) > -1}
-              onUserPress={this.onUserPress}
-              onMorePress={this.onMorePress}
-              onLikePress={this.onLikePress}
-              onLinkPress={this.onLinkPress}
-            />
+      <ScrollView style={styles.container}>
+        <View testID="Home">
+
+          <View style={styles.header}>
+            <View style={styles.degree}>
+              <View style={styles.degreeIcon} />
+              <Text style={styles.degreeTxt}>お酒をたしなむ人</Text>
+            </View>
+
+            <View style={styles.summary}>
+              <View style={styles.total}>
+                <Text style={styles.num}>124</Text>
+                <Text style={styles.label}>杯</Text>
+              </View>
+              <View style={styles.badges}>
+                <Text style={styles.num}>12</Text>
+                <Text style={styles.label}>獲得バッジ</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.category}>
+            <Text style={styles.headLine}>カテゴリ</Text>
+            <View style={styles.categoryCards} />
+            <View style={styles.row}>
+              <CategoryCard categoryName="カクテル" />
+              <CategoryCard categoryName="ワイン" />
+              <CategoryCard categoryName="ビール" />
+            </View>
+            <View style={styles.row}>
+              <CategoryCard categoryName="日本酒" />
+              <CategoryCard categoryName="焼酎" />
+              <CategoryCard categoryName="ウイスキー" />
+            </View>
+
+          </View>
+
+          <View style={styles.timeLine}>
+            <Text style={styles.headLine}>タイムライン</Text>
+            <FlatList
+              data={posts}
+              keyExtractor={item => item.key}
+              renderItem={({ item, index, viewableItemIndices }) => (
+                <Item
+                  {...item}
+                  visible={viewableItemIndices.indexOf(index) > -1}
+                  onUserPress={this.onUserPress}
+                  onMorePress={this.onMorePress}
+                  onLikePress={this.onLikePress}
+                  onLinkPress={this.onLinkPress}
+                />
+              )}
+              refreshControl={(
+                <RefreshControl
+                  refreshing={fetching}
+                  onRefresh={this.onRefresh}
+                />
           )}
-          refreshControl={(
-            <RefreshControl
-              refreshing={fetching}
-              onRefresh={this.onRefresh}
+              ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
+              onEndReachedThreshold={0.1}
+              onEndReached={this.onEndReached}
             />
-          )}
-          ListFooterComponent={() => (loading ? <View style={styles.loading}><ActivityIndicator size="small" /></View> : null)}
-          onEndReachedThreshold={0.1}
-          onEndReached={this.onEndReached}
-        />
-      </View>
+          </View>
+
+        </View>
+      </ScrollView>
     );
   }
 }

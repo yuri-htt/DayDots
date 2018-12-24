@@ -10,6 +10,7 @@ import StarRating from 'react-native-star-rating';
 import { Image } from 'react-native-expo-image-cache';
 import Hyperlink from 'react-native-hyperlink';
 import LinkifyIt from 'linkify-it';
+import moment from 'moment';
 
 /* from app */
 import Avatar from 'app/src/components/Avatar';
@@ -109,59 +110,34 @@ export default class Item extends React.Component {
       return <View style={{ height }} />;
     }
 
+    const postedDate = moment(timestamp).format('MM月DD日');
+
     return (
       <View style={styles.container} onLayout={this.onLayout}>
 
-        <View style={styles.header}>
-          <View style={styles.headerUser}>
-            <TouchableOpacity style={styles.avatar} onPress={() => onUserPress(this.props)}>
-              <Avatar uri={user.img} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => onUserPress(this.props)}>
-              <Text>{user.name}</Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <IconButton name="ios-more" size={26} style={styles.icon} onPress={() => onMorePress(this.props)} />
-          </View>
-        </View>
+        <TouchableOpacity style={styles.avatar} onPress={() => onUserPress(this.props)}>
+          <Avatar uri={user.img} />
+        </TouchableOpacity>
 
-        <View style={styles.content}>
-          {type === 'photo' && (
-          <View style={styles.image}>
-            <Image uri={fileUri} style={styles.file} />
-            <View style={styles.buttons}>
-              <IconButton
-                name={liked ? 'ios-heart' : 'ios-heart-outline'}
-                size={26}
-                style={styles.icon}
-                color={liked ? '#ed4956' : Constants.manifest.extra.textColor}
-                onPress={() => onLikePress(this.props)}
-              />
-            </View>
-          </View>
-          )}
-
-          <View>
-            {titleText != '' && (
+        <View style={styles.rightColumn}>
+          {titleText != '' && (
             <Text style={styles.titleText}>{titleText}</Text>
-            )}
-            {text != '' && (
+          )}
+          {text != '' && (
             <Hyperlink onPress={onLinkPress} linkify={linkify} linkStyle={{ color: '#2980b9' }}>
-              <Text style={styles.text}>{text}</Text>
+              <Text style={styles.text}>{postedDate}</Text>
             </Hyperlink>
-            )}
-            <View style={styles.stars}>
-              <StarRating
-                disabled
-                maxStars={5}
-                rating={starCount}
-                starSize={20}
-                buttonStyle={{ marginHorizontal: 4 }}
-                fullStarColor="orange"
-                emptyStarColor="orange"
-              />
-            </View>
+          )}
+          <View style={styles.stars}>
+            <StarRating
+              disabled
+              maxStars={5}
+              rating={starCount}
+              starSize={12}
+              buttonStyle={{ marginHorizontal: 2 }}
+              fullStarColor="orange"
+              emptyStarColor="orange"
+            />
           </View>
           {/*
           <Text style={styles.time}>{this.getRelativeTime(timestamp)}</Text>

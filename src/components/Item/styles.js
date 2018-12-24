@@ -1,9 +1,16 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginBottom: 12,
+    borderRadius: 4,
+    shadowOffset: { width: 4, height: 4 },
+    shadowColor: 'black',
+    shadowOpacity: 0.25,
+    backgroundColor: '#FFF',
+    padding: 16,
+    flexDirection: 'row',
   },
   header: {
     flexDirection: 'row',
@@ -11,41 +18,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
   },
-  content: {
-    flexDirection: 'row',
-  },
-  headerUser: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   avatar: {
-    marginRight: 8,
-  },
-  image: {
-    width: 150,
-    height: 150,
-  },
-  file: {
-    flex: 1,
-  },
-  buttons: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    paddingHorizontal: 4,
+    marginRight: 16,
   },
   icon: {
     paddingHorizontal: 0,
     paddingVertical: 0,
   },
   titleText: {
-    fontSize: 30,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    color: '#212121',
+    fontSize: 16,
+    lineHeight: 16 * 1.3,
   },
   text: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    color: '#757575',
+    fontSize: 12,
   },
   time: {
     paddingHorizontal: 12,
@@ -54,8 +41,7 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   stars: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    marginTop: 8,
   },
 });
 
